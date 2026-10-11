@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-lab-void text-slate-200 font-sans antialiased;
+    margin: 0;
+    overflow: hidden;
+    background-image:
+      radial-gradient(900px 520px at 12% -5%, rgba(34, 227, 255, 0.1), transparent 60%),
+      radial-gradient(760px 480px at 88% 0%, rgba(168, 85, 247, 0.1), transparent 62%),
+      radial-gradient(1000px 600px at 50% 110%, rgba(59, 130, 246, 0.09), transparent 65%);
+  }
+
+  /* Faint engineering grid behind everything. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(34, 227, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 227, 255, 0.045) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: radial-gradient(circle at 50% 40%, black, transparent 78%);
+    z-index: 0;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(7, 11, 26, 0.6);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(34, 227, 255, 0.45), rgba(168, 85, 247, 0.4));
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(34, 227, 255, 0.7), rgba(168, 85, 247, 0.6));
+  }
+}
+
+@layer components {
+  .glass {
+    @apply relative rounded-2xl border border-white/10 bg-white/[0.035] backdrop-blur-xl;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+      0 18px 40px -22px rgba(0, 0, 0, 0.9);
+  }
+
+  .glass-hover {
+    @apply transition-all duration-300 hover:border-lab-cyan/40 hover:bg-white/[0.06];
+  }
+
+  .panel-title {
+    @apply font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400;
+  }
+
+  .hair {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-xl border px-3.5 py-2
+           font-display text-xs font-semibold tracking-wide transition-all duration-200
+           active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply btn border-lab-cyan/40 bg-lab-cyan/10 text-lab-cyan
+           hover:border-lab-cyan/70 hover:bg-lab-cyan/20 hover:shadow-glow;
+  }
+
+  .btn-violet {
+    @apply btn border-lab-violet/40 bg-lab-violet/10 text-violet-200
+           hover:border-lab-violet/70 hover:bg-lab-violet/20 hover:shadow-violet;
+  }
+
+  .btn-ghost {
+    @apply btn border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/25 hover:bg-white/[0.07] hover:text-white;
+  }
+
+  /* Gradient hairline along the top edge of a panel. */
+  .edge-glow::after {
+    content: '';
+    position: absolute;
+    inset-inline: 12%;
+    top: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(34, 227, 255, 0.75), transparent);
+  }
+}
+
+@layer utilities {
+  .no-select {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/**
+ * Reduced-motion support.
+ *
+ * The decorative loops (guide illustrations, bubbling, shimmer) are purely
+ * ornamental, so they are switched off entirely. Functional movement — the
+ * hand cursor and the carried reagent following it — is driven by inline
+ * transforms in rAF and is intentionally left alone, because freezing it
+ * would make the app unusable rather than calmer.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-sway,
+  .animate-pinch,
+  .animate-drop,
+  .animate-pour,
+  .animate-scroll,
+  .animate-float,
+  .animate-pulse-ring,
+  .animate-shimmer,
+  .animate-spin-slow,
+  .animate-scan-line,
+  .animate-wobble,
+  .animate-heat {
+    animation: none !important;
+  }
+
+  .animate-fade-up {
+    animation-duration: 0.01ms !important;
+  }
+}
+/* Gas markers are illustrative: hydrogen itself is colourless. */
+.escaping-gas { position: absolute; top: 35px; width: 10px; height: 10px; border-radius: 50%; border: 1px solid #e0faff; background: #bff4ff80; box-shadow: 0 0 12px #8deaff80; animation: gas-escape 2.5s linear infinite; }
+@keyframes gas-escape { 0% { transform: translateY(0) scale(.7); opacity: 0; } 15% { opacity: .85; } 100% { transform: translateY(-105px) scale(1.8); opacity: 0; } }
+.reaction-burst { position: absolute; left: 50%; top: 35px; }
+.reaction-burst span { position: absolute; width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle, #fff4c2, #ff9c37 45%, transparent 72%); opacity: 0; animation: lab-burst 2.65s ease-out both; }
+@keyframes lab-burst { 0%, 17% { opacity: 0; transform: translate(-12px,-12px) scale(.1); } 35% { opacity: .9; } 100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(1.8); } }
+@media (prefers-reduced-motion: reduce) { .escaping-gas { animation: none; opacity: .35; transform: translateY(-20px); } .reaction-burst { display: none; } }
